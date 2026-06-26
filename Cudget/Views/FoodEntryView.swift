@@ -7,11 +7,15 @@
 
 import SwiftUI
 
+// TODO: fix this entire view's UI!! it's trash!!
+
 struct FoodEntryView: View {
-    @State private var food = ""
+    @Environment(\.dismiss) private var dismiss
+
+    @State private var name = ""
     @State private var calories = ""
     
-    @State private var showAlert = false
+    @State private var showMissingFieldsAlert = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
@@ -20,7 +24,7 @@ struct FoodEntryView: View {
                 .frame(maxWidth: .infinity, alignment: .center)
                 .padding(.bottom, 130)
 
-            TextField("Food", text: $food, axis: .vertical)
+            TextField("Food", text: $name, axis: .vertical)
                 .keyboardType(.default)
                 .textFieldStyle(.roundedBorder)
                 .lineLimit(1...4)
@@ -40,22 +44,24 @@ struct FoodEntryView: View {
 
             HStack(spacing: 8) {
                 Button("Add") {
-                    if food == "" || calories == "" {
-                        showAlert = true
+                    if name == "" || calories == "" {
+                        showMissingFieldsAlert = true
                     }
                 }
                 .frame(maxWidth: .infinity)
 
-                Button("Cancel") {}
+                Button("Cancel") {
+                    dismiss()
+                }
                 .frame(maxWidth: .infinity)
             }
             .padding(.top, 140)
             .buttonStyle(.glass)
         }
-        // TODO: fix shitty padding
         .padding(.bottom, 120)
         .padding()
-        .alert(isPresented: $showAlert) {
+        .navigationBarBackButtonHidden(true)
+        .alert(isPresented: $showMissingFieldsAlert) {
             Alert(
                 title: Text("Missing fields"),
                 message: Text("Please complete all fields to add food")
