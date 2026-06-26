@@ -21,52 +21,52 @@ struct FoodEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("Cudget")
-                .font(.system(size: 84, weight: .black, design: .rounded))
+            Text("Add Food")
+                .font(.largeTitle.bold())
                 .frame(maxWidth: .infinity, alignment: .center)
-                .padding(.bottom, 130)
 
-            TextField("Food", text: $name, axis: .vertical)
-                .keyboardType(.default)
-                .textFieldStyle(.roundedBorder)
-                .lineLimit(1...4)
-
-            HStack(spacing: 8) {
-                TextField("Calories", text: $calories)
-                    .keyboardType(.numberPad)
+            VStack(spacing: 20) {
+                TextField("Food", text: $name, axis: .vertical)
+                    .keyboardType(.default)
                     .textFieldStyle(.roundedBorder)
-                    .onChange(of: calories) { _, newValue in
-                        let filtered = newValue.filter { "0123456789".contains($0) }
-                        calories = filtered.first == "0" ? "" : filtered
-                    }
+                    .lineLimit(1...4)
+                    .padding(.vertical, 8)
 
-                Text("cal")
-                    .font(.body.bold())
-            }
+                HStack(spacing: 8) {
+                    TextField("Calories", text: $calories)
+                        .keyboardType(.numberPad)
+                        .textFieldStyle(.roundedBorder)
+                        .padding(.vertical, 8)
+                        .onChange(of: calories) { _, newValue in
+                            let filtered = newValue.filter { "0123456789".contains($0) }
+                            calories = filtered.first == "0" ? "" : filtered
+                        }
 
-            HStack(spacing: 8) {
-                Button("Add") {
-                    if name == "" || calories == "" {
-                        showMissingFieldsAlert = true
-                        return
-                    }
-
-                    onAddFood(Food(name: name, calories: Int(calories)!))
-                    dismiss()
+                    Text("cal")
+                        .font(.body.bold())
                 }
-                .frame(maxWidth: .infinity)
-
-                Button("Cancel") {
-                    dismiss()
-                }
-                .frame(maxWidth: .infinity)
             }
-            .padding(.top, 140)
-            .buttonStyle(.glass)
+            .frame(maxWidth: .infinity)
+            .padding(.top, 180)
+
+            Button("Add") {
+                if name == "" || calories == "" {
+                    showMissingFieldsAlert = true
+                    return
+                }
+
+                onAddFood(Food(name: name, calories: Int(calories)!))
+                dismiss()
+            }
+            .font(.title3.bold())
+            .foregroundStyle(.white)
+            .frame(maxWidth: .infinity)
+            .padding(.vertical, 14)
+            .glassEffect(.regular.tint(.red).interactive(), in: .rect(cornerRadius: 14))
+            .padding(.top, 100)
         }
         .padding(.bottom, 120)
         .padding()
-        .navigationBarBackButtonHidden(true)
         .alert("Missing Fields!", isPresented: $showMissingFieldsAlert) {
             Button("Okay", role: .cancel) {}
         } message: {
