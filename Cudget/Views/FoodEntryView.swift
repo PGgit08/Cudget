@@ -67,11 +67,10 @@ struct FoodEntryView: View {
         .padding(.bottom, 120)
         .padding()
         .navigationBarBackButtonHidden(true)
-        .alert(isPresented: $showMissingFieldsAlert) {
-            Alert(
-                title: Text("Missing fields"),
-                message: Text("Please complete all fields to add food")
-            )
+        .alert("Missing Fields!", isPresented: $showMissingFieldsAlert) {
+            Button("Okay", role: .cancel) {}
+        } message: {
+            Text("Please complete all the fields to add food.")
         }
     }
 }
