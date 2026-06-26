@@ -17,6 +17,8 @@ struct FoodEntryView: View {
     
     @State private var showMissingFieldsAlert = false
 
+    let onAddFood: (Food) -> Void
+
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
             Text("Cudget")
@@ -46,7 +48,11 @@ struct FoodEntryView: View {
                 Button("Add") {
                     if name == "" || calories == "" {
                         showMissingFieldsAlert = true
+                        return
                     }
+
+                    onAddFood(Food(name: name, calories: Int(calories)!))
+                    dismiss()
                 }
                 .frame(maxWidth: .infinity)
 
@@ -71,5 +77,5 @@ struct FoodEntryView: View {
 }
 
 #Preview {
-    FoodEntryView()
+    FoodEntryView { _ in }
 }

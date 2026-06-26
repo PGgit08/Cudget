@@ -12,20 +12,20 @@ struct MainView: View {
     @State private var remainingCalories = 0
 
     @State private var foods: [Food] = [
-        Food(name: "Apple", calories: 95),
-        Food(name: "Banana", calories: 105),
-        Food(name: "Greek Yogurt", calories: 150),
-        Food(name: "Chicken Breast", calories: 240),
-        Food(name: "Rice Bowl", calories: 430),
-        Food(name: "Avocado Toast", calories: 290),
-        Food(name: "Turkey Sandwich", calories: 360),
-        Food(name: "Caesar Salad", calories: 410),
-        Food(name: "Protein Smoothie", calories: 320),
-        Food(name: "Eggs", calories: 140),
-        Food(name: "Oatmeal", calories: 180),
-        Food(name: "Peanut Butter Toast", calories: 330),
-        Food(name: "Salmon", calories: 390),
-        Food(name: "Pasta", calories: 520)
+//        Food(name: "Apple", calories: 95),
+//        Food(name: "Banana", calories: 105),
+//        Food(name: "Greek Yogurt", calories: 150),
+//        Food(name: "Chicken Breast", calories: 240),
+//        Food(name: "Rice Bowl", calories: 430),
+//        Food(name: "Avocado Toast", calories: 290),
+//        Food(name: "Turkey Sandwich", calories: 360),
+//        Food(name: "Caesar Salad", calories: 410),
+//        Food(name: "Protein Smoothie", calories: 320),
+//        Food(name: "Eggs", calories: 140),
+//        Food(name: "Oatmeal", calories: 180),
+//        Food(name: "Peanut Butter Toast", calories: 330),
+//        Food(name: "Salmon", calories: 390),
+//        Food(name: "Pasta", calories: 520)
     ]
     
     var body: some View {
@@ -79,7 +79,9 @@ struct MainView: View {
             }
 
             NavigationLink {
-                FoodEntryView()
+                FoodEntryView { food in
+                    foods.append(food)
+                }
             } label: {
                 Text("Add Food")
                     .font(.title3.bold())
