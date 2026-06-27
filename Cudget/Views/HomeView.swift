@@ -8,13 +8,20 @@
 import SwiftUI
 
 struct MainView: View {
-    @State private var todaysCudget = 0
-    @State private var remainingCalories = 0
+    @Binding var cudget: Cudget
+    
+    private var todaysCudget: Int {
+        Weekday.today().getCalories(from: cudget)
+    }
+
+    private var remainingCalories: Int {
+        todaysCudget - foods.reduce(0) { $0 + $1.calories }
+    }
 
     @State private var foods: [Food] = [
-//        Food(name: "Apple", calories: 95),
-//        Food(name: "Banana", calories: 105),
-//        Food(name: "Greek Yogurt", calories: 150),
+        Food(name: "Apple", calories: 95),
+        Food(name: "Banana", calories: 105),
+        Food(name: "Greek Yogurt", calories: 150),
 //        Food(name: "Chicken Breast", calories: 240),
 //        Food(name: "Rice Bowl", calories: 430),
 //        Food(name: "Avocado Toast", calories: 290),
@@ -35,7 +42,7 @@ struct MainView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 32) {
-            CudgetHeadingView()
+            CudgetHeadingView(cudget: $cudget)
 
             ScrollView {
                 VStack(spacing: 8) {
@@ -90,7 +97,6 @@ struct MainView: View {
             NavigationLink {
                 FoodEntryView { food in
                     foods.append(food)
-                    remainingCalories -= food.calories
                 }
             } label: {
                 Text("Add Food")
@@ -112,7 +118,6 @@ struct MainView: View {
 
             Button("Delete Food", role: .destructive) {
                 foods.removeAll { $0.id == food.id }
-                remainingCalories += food.calories
                 selectedFood = Self.dummyFood
             }
         } message: { food in
@@ -122,5 +127,5 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView()
+    MainView(cudget: .constant(Cudget()))
 }

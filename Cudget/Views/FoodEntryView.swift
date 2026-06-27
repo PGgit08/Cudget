@@ -21,10 +21,6 @@ struct FoodEntryView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 20) {
-            Text("Add Food")
-                .font(.largeTitle.bold())
-                .frame(maxWidth: .infinity, alignment: .center)
-
             VStack(spacing: 20) {
                 TextField("Food", text: $name, axis: .vertical)
                     .keyboardType(.default)
@@ -67,6 +63,19 @@ struct FoodEntryView: View {
         }
         .padding(.bottom, 120)
         .padding()
+        .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
+        .overlay(alignment: .topLeading) {
+            Button {
+                dismiss()
+            } label: {
+                Image(systemName: "chevron.left")
+                    .font(.title3.bold())
+                    .padding()
+                    .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+        }
         .alert("Missing Fields!", isPresented: $showMissingFieldsAlert) {
             Button("Okay", role: .cancel) {}
         } message: {

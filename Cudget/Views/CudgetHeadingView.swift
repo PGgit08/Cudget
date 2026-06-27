@@ -8,11 +8,13 @@
 import SwiftUI
 
 struct CudgetHeadingView: View {
+    @Binding var cudget: Cudget
+    
     var body: some View {
         VStack(spacing: 1) {
             HStack {
                 NavigationLink {
-                    CudgetView()
+                    CudgetView(cudget: $cudget)
                 } label: {
                     Text("Cudget 🗓️")
                         .font(.title2)
@@ -42,6 +44,6 @@ struct CudgetHeadingView: View {
 
 #Preview {
     NavigationStack {
-        CudgetHeadingView()
+        CudgetHeadingView(cudget: .constant(Cudget()))
     }
 }

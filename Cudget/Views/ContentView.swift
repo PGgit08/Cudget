@@ -8,9 +8,11 @@
 import SwiftUI
 
 struct ContentView: View {
+    @State private var cudget = Cudget()
+    
     var body: some View {
         NavigationStack {
-            MainView()
+            MainView(cudget: $cudget)
         }
     }
 }
