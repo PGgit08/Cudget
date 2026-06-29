@@ -44,27 +44,26 @@ struct MainView: View {
         VStack(alignment: .leading, spacing: 32) {
             VStack(spacing: 10) {
                 HStack {
+                    Text("Track your calories today!")
+                        .font(
+                            .footnote
+                            .italic()
+                        )
+                        .contentShape(Rectangle())
+                        .padding(.top, 3)
+                    
+                    Spacer()
+                    
                     NavigationLink {
                         CudgetView(cudget: $cudget)
                     } label: {
-                        Text("Cudget 🗓️")
-                            .font(.title2)
-                            .contentShape(Rectangle())
-                    }
-                    .buttonStyle(.plain)
-
-                    Spacer()
-
-                    NavigationLink {
-                        HistoryView()
-                    } label: {
-                        Text("History 📈")
+                        Text("My Cudget 🗓️")
                             .font(.title2)
                             .contentShape(Rectangle())
                     }
                     .buttonStyle(.plain)
                 }
-                .padding(.horizontal, 20)
+                .padding(.horizontal, 10)
 
                 Text("Cudget")
                     .font(.system(size: 84, weight: .black, design: .rounded))

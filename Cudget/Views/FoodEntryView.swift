@@ -7,8 +7,6 @@
 
 import SwiftUI
 
-// TODO: fix this entire view's UI!! it's trash!!
-
 struct FoodEntryView: View {
     @Environment(\.dismiss) private var dismiss
 
@@ -20,31 +18,29 @@ struct FoodEntryView: View {
     let onAddFood: (Food) -> Void
 
     var body: some View {
-        VStack(alignment: .leading, spacing: 20) {
-            VStack(spacing: 20) {
-                TextField("Food", text: $name, axis: .vertical)
-                    .keyboardType(.default)
+        VStack(alignment: .leading, spacing: 16) {
+            TextField("Food", text: $name, axis: .vertical)
+                .keyboardType(.default)
+                .textFieldStyle(.roundedBorder)
+                .lineLimit(1...4)
+                .padding(.top, 300)
+
+            HStack(spacing: 8) {
+                TextField("Calories", text: $calories)
+                    .keyboardType(.numberPad)
                     .textFieldStyle(.roundedBorder)
-                    .lineLimit(1...4)
                     .padding(.vertical, 8)
+                    .onChange(of: calories) { _, newValue in
+                        let filtered = newValue.filter { "0123456789".contains($0) }
+                        calories = filtered.first == "0" ? "" : filtered
+                    }
 
-                HStack(spacing: 8) {
-                    TextField("Calories", text: $calories)
-                        .keyboardType(.numberPad)
-                        .textFieldStyle(.roundedBorder)
-                        .padding(.vertical, 8)
-                        .onChange(of: calories) { _, newValue in
-                            let filtered = newValue.filter { "0123456789".contains($0) }
-                            calories = filtered.first == "0" ? "" : filtered
-                        }
-
-                    Text("cal")
-                        .font(.body.bold())
-                }
+                Text("cal")
+                    .font(.body.bold())
             }
-            .frame(maxWidth: .infinity)
-            .padding(.top, 260)
 
+            Spacer()
+            
             Button {
                 if name == "" || calories == "" {
                     showMissingFieldsAlert = true
@@ -57,7 +53,7 @@ struct FoodEntryView: View {
                 CalorieButtonView(text: "Add", color: .red)
             }
             .buttonStyle(.plain)
-            .padding(.top, 140)
+            .padding(.bottom, 25)
         }
         .padding()
         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
@@ -68,6 +64,7 @@ struct FoodEntryView: View {
                 .font(.title3.bold())
                 .foregroundStyle(.primary)
                 .padding()
+                .padding(.top, 15)
                 .contentShape(Rectangle())
                 .onTapGesture {
                     dismiss()
