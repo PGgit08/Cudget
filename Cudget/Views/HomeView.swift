@@ -9,6 +9,7 @@ import SwiftUI
 
 struct MainView: View {
     @Binding var cudget: Cudget
+    @Binding var foods: [Food]
     
     private var todaysCudget: Int {
         Weekday.today().getCalories(from: cudget)
@@ -17,23 +18,6 @@ struct MainView: View {
     private var remainingCalories: Int {
         todaysCudget - foods.reduce(0) { $0 + $1.calories }
     }
-
-    @State private var foods: [Food] = [
-        Food(name: "Apple", calories: 95),
-        Food(name: "Banana", calories: 105),
-        Food(name: "Greek Yogurt", calories: 150),
-//        Food(name: "Chicken Breast", calories: 240),
-//        Food(name: "Rice Bowl", calories: 430),
-//        Food(name: "Avocado Toast", calories: 290),
-//        Food(name: "Turkey Sandwich", calories: 360),
-//        Food(name: "Caesar Salad", calories: 410),
-//        Food(name: "Protein Smoothie", calories: 320),
-//        Food(name: "Eggs", calories: 140),
-//        Food(name: "Oatmeal", calories: 180),
-//        Food(name: "Peanut Butter Toast", calories: 330),
-//        Food(name: "Salmon", calories: 390),
-//        Food(name: "Pasta", calories: 520)
-    ]
     
     private static let dummyFood = Food(name: "Dummy", calories: 0)
     
@@ -148,5 +132,9 @@ struct MainView: View {
 }
 
 #Preview {
-    MainView(cudget: .constant(Cudget()))
+    MainView(cudget: .constant(Cudget()), foods: .constant([
+        Food(name: "Apple", calories: 95),
+        Food(name: "Banana", calories: 105),
+        Food(name: "Greek Yogurt", calories: 150)
+    ]))
 }

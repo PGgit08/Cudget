@@ -7,7 +7,7 @@
 
 import Foundation
 
-struct Cudget {
+struct Cudget: Codable, Equatable {
     public static var defaultCalories = 2000
     
     var sunday: Int = defaultCalories
