@@ -42,7 +42,34 @@ struct MainView: View {
     
     var body: some View {
         VStack(alignment: .leading, spacing: 32) {
-            CudgetHeadingView(cudget: $cudget)
+            VStack(spacing: 10) {
+                HStack {
+                    NavigationLink {
+                        CudgetView(cudget: $cudget)
+                    } label: {
+                        Text("Cudget 🗓️")
+                            .font(.title2)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+
+                    Spacer()
+
+                    NavigationLink {
+                        HistoryView()
+                    } label: {
+                        Text("History 📈")
+                            .font(.title2)
+                            .contentShape(Rectangle())
+                    }
+                    .buttonStyle(.plain)
+                }
+                .padding(.horizontal, 20)
+
+                Text("Cudget")
+                    .font(.system(size: 84, weight: .black, design: .rounded))
+                    .frame(maxWidth: .infinity, alignment: .center)
+            }
 
             ScrollView {
                 VStack(spacing: 8) {
@@ -99,13 +126,7 @@ struct MainView: View {
                     foods.append(food)
                 }
             } label: {
-                Text("Add Food")
-                    .font(.title3.bold())
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .contentShape(Rectangle())
-                    .glassEffect(.regular.tint(.red).interactive(), in: .rect(cornerRadius: 14))
+                CalorieButtonView(text: "Add Food", color: .red)
             }
             .buttonStyle(.plain)
         }

@@ -54,13 +54,7 @@ struct FoodEntryView: View {
                 onAddFood(Food(name: name, calories: Int(calories)!))
                 dismiss()
             } label: {
-                Text("Add")
-                    .font(.title3.bold())
-                    .foregroundStyle(.white)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 14)
-                    .contentShape(Rectangle())
-                    .glassEffect(.regular.tint(.red).interactive(), in: .rect(cornerRadius: 14))
+                CalorieButtonView(text: "Add", color: .red)
             }
             .buttonStyle(.plain)
             .padding(.top, 140)
