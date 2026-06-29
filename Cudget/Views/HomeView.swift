@@ -104,6 +104,7 @@ struct MainView: View {
                     .foregroundStyle(.white)
                     .frame(maxWidth: .infinity)
                     .padding(.vertical, 14)
+                    .contentShape(Rectangle())
                     .glassEffect(.regular.tint(.red).interactive(), in: .rect(cornerRadius: 14))
             }
             .buttonStyle(.plain)

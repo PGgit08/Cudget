@@ -43,9 +43,9 @@ struct FoodEntryView: View {
                 }
             }
             .frame(maxWidth: .infinity)
-            .padding(.top, 180)
+            .padding(.top, 260)
 
-            Button("Add") {
+            Button {
                 if name == "" || calories == "" {
                     showMissingFieldsAlert = true
                     return
@@ -53,28 +53,31 @@ struct FoodEntryView: View {
 
                 onAddFood(Food(name: name, calories: Int(calories)!))
                 dismiss()
+            } label: {
+                Text("Add")
+                    .font(.title3.bold())
+                    .foregroundStyle(.white)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 14)
+                    .contentShape(Rectangle())
+                    .glassEffect(.regular.tint(.red).interactive(), in: .rect(cornerRadius: 14))
             }
-            .font(.title3.bold())
-            .foregroundStyle(.white)
-            .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
-            .glassEffect(.regular.tint(.red).interactive(), in: .rect(cornerRadius: 14))
-            .padding(.top, 100)
+            .buttonStyle(.plain)
+            .padding(.top, 140)
         }
-        .padding(.bottom, 120)
         .padding()
+        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .overlay(alignment: .topLeading) {
-            Button {
-                dismiss()
-            } label: {
-                Image(systemName: "chevron.left")
-                    .font(.title3.bold())
-                    .padding()
-                    .contentShape(Rectangle())
-            }
-            .buttonStyle(.plain)
+            Image(systemName: "chevron.left")
+                .font(.title3.bold())
+                .foregroundStyle(.primary)
+                .padding()
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    dismiss()
+                }
         }
         .alert("Missing Fields!", isPresented: $showMissingFieldsAlert) {
             Button("Okay", role: .cancel) {}
@@ -85,5 +88,7 @@ struct FoodEntryView: View {
 }
 
 #Preview {
-    FoodEntryView { _ in }
+    NavigationStack {
+        FoodEntryView { _ in }
+    }
 }
