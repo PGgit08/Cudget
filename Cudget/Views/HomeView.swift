@@ -24,11 +24,27 @@ struct MainView: View {
     @State private var selectedCalorie = Self.dummyCalorie
     @State private var showingCalorieAlert = false
     
+    private static let messages = [
+        "Track your calories today!",
+        "You got this!",
+        "Make sure to exercise!",
+        "Eat protein!",
+        "Don't eat sugar!",
+        "Don't eat bs!"
+    ]
+    
+    @State private var message = Self.messages.randomElement() ?? "Track your calories today!"
+    
+    private func loadRandomMessage() {
+        let availableMessages = Self.messages.filter { $0 != message }
+        message = availableMessages.randomElement() ?? Self.messages.randomElement() ?? message
+    }
+    
     var body: some View {
         VStack(alignment: .leading, spacing: 10) {
             VStack(spacing: 2) {
                 HStack {
-                    Text("Track your calories today!")
+                    Text(message)
                         .font(
                             .footnote
                             .italic()
@@ -112,7 +128,7 @@ struct MainView: View {
                         calories.append(calorie)
                     })
                 } label: {
-                    CalorieButtonView(text: "Add Food", color: .red)
+                    CalorieButtonView(activity: false)
                 }
                 .buttonStyle(.plain)
                 
@@ -121,13 +137,16 @@ struct MainView: View {
                         calories.append(calorie)
                     })
                 } label: {
-                    CalorieButtonView(text: "Add Activity", color: .green)
+                    CalorieButtonView(activity: true)
                 }
                 .buttonStyle(.plain)
             }
         }
         .frame(maxHeight: .infinity, alignment: .top)
         .padding(.horizontal)
+        .onAppear {
+            loadRandomMessage()
+        }
         .alert("Details", isPresented: $showingCalorieAlert, presenting: selectedCalorie) { calorie in
             Button("Okay", role: .cancel) {
                 selectedCalorie = Self.dummyCalorie
@@ -145,8 +164,8 @@ struct MainView: View {
 
 #Preview {
     MainView(cudget: .constant(Cudget()), calories: .constant([
-        Calorie(name: "Apple", calories: 95),
-        Calorie(name: "Banana", calories: 105),
-        Calorie(name: "Greek Yogurt", calories: 150)
+        Calorie(name: "Apple", calories: -95),
+        Calorie(name: "Banana", calories: -105),
+        Calorie(name: "Greek Yogurt", calories: -150)
     ]))
 }

@@ -1,5 +1,5 @@
 //
-//  FoodEntryView.swift
+//  CalorieEntryView.swift
 //  Cudget
 //
 //  Created by Peter Gutkovich on 6/25/26.
@@ -51,7 +51,7 @@ struct CalorieEntryView: View {
                 onAdd(Calorie(name: name, calories: activity ? Int(calories)! : -Int(calories)!))
                 dismiss()
             } label: {
-                CalorieButtonView(text: "Add", color: activity ? .green : .red)
+                CalorieButtonView(activity: activity)
             }
             .buttonStyle(.plain)
             .padding(.bottom, 25)
@@ -74,13 +74,13 @@ struct CalorieEntryView: View {
         .alert("Missing Fields!", isPresented: $showMissingFieldsAlert) {
             Button("Okay", role: .cancel) {}
         } message: {
-            Text("Please complete all the fields to add food.")
+            Text("Please complete all the fields to add " + (activity ? "activity." : "food."))
         }
     }
 }
 
 #Preview {
     NavigationStack {
-        CalorieEntryView(activity: false, onAdd: { _ in })
+        CalorieEntryView(activity: true, onAdd: { _ in })
     }
 }

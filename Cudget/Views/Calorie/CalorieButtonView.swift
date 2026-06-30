@@ -8,21 +8,20 @@
 import SwiftUI
 
 struct CalorieButtonView: View {
-    let text: String
-    let color: Color
+    let activity: Bool
 
     var body: some View {
-        Text(text)
+        Text(activity ? "Add Activity" : "Add Food")
             .font(.title3.bold())
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
             .padding(.vertical, 12)
             .contentShape(Rectangle())
-            .glassEffect(.regular.tint(color).interactive(), in: .rect(cornerRadius: 14))
+            .glassEffect(.regular.tint(activity ? .green : .red).interactive(), in: .rect(cornerRadius: 14))
     }
 }
 
 #Preview {
-    CalorieButtonView(text: "Add Calorie", color: .red)
+    CalorieButtonView(activity: true)
         .padding()
 }
