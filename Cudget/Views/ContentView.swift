@@ -12,40 +12,40 @@ struct ContentView: View {
     @Environment(\.scenePhase) private var scenePhase
 
     @State private var cudget = CudgetStorage.loadCudget()
-    @State private var foods = CudgetStorage.loadFoods()
+    @State private var calories = CudgetStorage.loadCalories()
     
     var body: some View {
         NavigationStack {
-            MainView(cudget: $cudget, foods: $foods)
+            MainView(cudget: $cudget, calories: $calories)
         }
         .background(KeyboardDismissView())
         .onAppear {
-            clearFoodsIfNeeded()
+            clearCaloriesIfNeeded()
         }
         .onChange(of: scenePhase) { _, newValue in
             if newValue == .active {
-                clearFoodsIfNeeded()
+                clearCaloriesIfNeeded()
             }
         }
         .onChange(of: cudget) { _, newValue in
             CudgetStorage.saveCudget(newValue)
         }
-        .onChange(of: foods) { _, newValue in
-            CudgetStorage.saveFoods(newValue)
+        .onChange(of: calories) { _, newValue in
+            CudgetStorage.saveCalories(newValue)
         }
         .task {
-            await clearFoodsAtMidnight()
+            await clearCaloriesAtMidnight()
         }
     }
 
-    private func clearFoodsIfNeeded() {
-        if CudgetStorage.shouldClearFoodsForToday() {
-            foods = []
-            CudgetStorage.saveFoods([])
+    private func clearCaloriesIfNeeded() {
+        if CudgetStorage.shouldClearCaloriesForToday() {
+            calories = []
+            CudgetStorage.saveCalories([])
         }
     }
 
-    private func clearFoodsAtMidnight() async {
+    private func clearCaloriesAtMidnight() async {
         while !Task.isCancelled {
             let now = Date()
             let nextMidnight = Calendar.current.nextDate(
@@ -58,7 +58,7 @@ struct ContentView: View {
             try? await Task.sleep(for: .seconds(secondsUntilMidnight))
 
             if !Task.isCancelled {
-                clearFoodsIfNeeded()
+                clearCaloriesIfNeeded()
             }
         }
     }
@@ -66,8 +66,8 @@ struct ContentView: View {
 
 private enum CudgetStorage {
     private static let cudgetKey = "savedCudget"
-    private static let foodsKey = "savedFoods"
-    private static let foodsSavedDateKey = "foodsSavedDate"
+    private static let caloriesKey = "savedCalories"
+    private static let caloriesSavedDateKey = "caloriesSavedDate"
 
     static func loadCudget() -> Cudget {
         guard let data = UserDefaults.standard.data(forKey: cudgetKey),
@@ -83,28 +83,28 @@ private enum CudgetStorage {
         UserDefaults.standard.set(data, forKey: cudgetKey)
     }
 
-    static func loadFoods() -> [Food] {
-        if shouldClearFoodsForToday() {
-            saveFoods([])
+    static func loadCalories() -> [Calorie] {
+        if shouldClearCaloriesForToday() {
+            saveCalories([])
             return []
         }
 
-        guard let data = UserDefaults.standard.data(forKey: foodsKey),
-              let foods = try? JSONDecoder().decode([Food].self, from: data) else {
+        guard let data = UserDefaults.standard.data(forKey: caloriesKey),
+              let calories = try? JSONDecoder().decode([Calorie].self, from: data) else {
             return []
         }
 
-        return foods
+        return calories
     }
 
-    static func saveFoods(_ foods: [Food]) {
-        guard let data = try? JSONEncoder().encode(foods) else { return }
-        UserDefaults.standard.set(data, forKey: foodsKey)
-        UserDefaults.standard.set(Date(), forKey: foodsSavedDateKey)
+    static func saveCalories(_ calories: [Calorie]) {
+        guard let data = try? JSONEncoder().encode(calories) else { return }
+        UserDefaults.standard.set(data, forKey: caloriesKey)
+        UserDefaults.standard.set(Date(), forKey: caloriesSavedDateKey)
     }
 
-    static func shouldClearFoodsForToday() -> Bool {
-        guard let savedDate = UserDefaults.standard.object(forKey: foodsSavedDateKey) as? Date else {
+    static func shouldClearCaloriesForToday() -> Bool {
+        guard let savedDate = UserDefaults.standard.object(forKey: caloriesSavedDateKey) as? Date else {
             return false
         }
 

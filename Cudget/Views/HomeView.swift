@@ -9,24 +9,24 @@ import SwiftUI
 
 struct MainView: View {
     @Binding var cudget: Cudget
-    @Binding var foods: [Food]
+    @Binding var calories: [Calorie]
     
     private var todaysCudget: Int {
         Weekday.today().getCalories(from: cudget)
     }
 
     private var remainingCalories: Int {
-        todaysCudget - foods.reduce(0) { $0 + $1.calories }
+        todaysCudget + calories.reduce(0) { $0 + $1.calories }
     }
     
-    private static let dummyFood = Food(name: "Dummy", calories: 0)
+    private static let dummyCalorie = Calorie(name: "Dummy", calories: 0)
     
-    @State private var selectedFood = Self.dummyFood
-    @State private var showingFoodAlert = false
+    @State private var selectedCalorie = Self.dummyCalorie
+    @State private var showingCalorieAlert = false
     
     var body: some View {
-        VStack(alignment: .leading, spacing: 32) {
-            VStack(spacing: 10) {
+        VStack(alignment: .leading, spacing: 10) {
+            VStack(spacing: 2) {
                 HStack {
                     Text("Track your calories today!")
                         .font(
@@ -47,29 +47,30 @@ struct MainView: View {
                     }
                     .buttonStyle(.plain)
                 }
-                .padding(.horizontal, 10)
+                .padding(.horizontal, 12)
 
                 Text("Cudget")
                     .font(.system(size: 84, weight: .black, design: .rounded))
                     .frame(maxWidth: .infinity, alignment: .center)
             }
+            .padding(.top, 10)
 
             ScrollView {
                 VStack(spacing: 8) {
-                    if foods.isEmpty {
-                        Text("🥗")
+                    if calories.isEmpty {
+                        Text("🥗 🏃")
                             .font(.system(size: 36))
 
-                        Text("no foods yet")
+                        Text("nothing yet")
                             .font(.headline)
                             .foregroundStyle(.secondary)
                     } else {
-                        ForEach(foods) { food in
+                        ForEach(calories) { calorie in
                             Button {
-                                selectedFood = food
-                                showingFoodAlert = true
+                                selectedCalorie = calorie
+                                showingCalorieAlert = true
                             } label: {
-                                FoodRowView(name: food.name, calories: food.calories)
+                                CalorieRowView(name: calorie.name, calories: calorie.calories)
                             }
                             .buttonStyle(.plain)
                         }
@@ -78,10 +79,10 @@ struct MainView: View {
                 .frame(maxWidth: .infinity)
                 .padding()
             }
-            .frame(maxWidth: .infinity, minHeight: 220, maxHeight: 430)
+            .frame(maxWidth: .infinity, minHeight: 230, maxHeight: 430)
             .background(Color.gray.opacity(0.18))
             .clipShape(RoundedRectangle(cornerRadius: 12))
-
+            
             VStack(spacing: 12) {
                 HStack {
                     Text("Today's Cudget:")
@@ -89,7 +90,7 @@ struct MainView: View {
 
                     Spacer()
 
-                    Text("\(todaysCudget)")
+                    Text("\(todaysCudget) cal")
                         .font(.title2)
                 }
 
@@ -99,42 +100,53 @@ struct MainView: View {
 
                     Spacer()
 
-                    Text("\(remainingCalories)")
+                    Text("\(remainingCalories) cal")
                         .font(.title2)
                 }
             }
+            .padding()
 
-            NavigationLink {
-                FoodEntryView { food in
-                    foods.append(food)
+            VStack(spacing: 10) {
+                NavigationLink {
+                    CalorieEntryView(activity: false, onAdd: { calorie in
+                        calories.append(calorie)
+                    })
+                } label: {
+                    CalorieButtonView(text: "Add Food", color: .red)
                 }
-            } label: {
-                CalorieButtonView(text: "Add Food", color: .red)
+                .buttonStyle(.plain)
+                
+                NavigationLink {
+                    CalorieEntryView(activity: true, onAdd: { calorie in
+                        calories.append(calorie)
+                    })
+                } label: {
+                    CalorieButtonView(text: "Add Activity", color: .green)
+                }
+                .buttonStyle(.plain)
             }
-            .buttonStyle(.plain)
         }
         .frame(maxHeight: .infinity, alignment: .top)
-        .padding(.top, 24)
         .padding(.horizontal)
-        .alert("Food Details", isPresented: $showingFoodAlert, presenting: selectedFood) { food in
+        .alert("Details", isPresented: $showingCalorieAlert, presenting: selectedCalorie) { calorie in
             Button("Okay", role: .cancel) {
-                selectedFood = Self.dummyFood
+                selectedCalorie = Self.dummyCalorie
             }
 
-            Button("Delete Food", role: .destructive) {
-                foods.removeAll { $0.id == food.id }
-                selectedFood = Self.dummyFood
+            Button("Delete", role: .destructive) {
+                calories.removeAll { $0.id == calorie.id }
+                selectedCalorie = Self.dummyCalorie
             }
-        } message: { food in
-            Text(AttributedString("\(food.name)\n\(food.calories) cal"))
+        } message: { calorie in
+            Text(AttributedString("\(calorie.name)\n\(calorie.calories) cal"))
         }
     }
 }
 
 #Preview {
-    MainView(cudget: .constant(Cudget()), foods: .constant([
-        Food(name: "Apple", calories: 95),
-        Food(name: "Banana", calories: 105),
-        Food(name: "Greek Yogurt", calories: 150)
+    MainView(cudget: .constant(Cudget()), calories: .constant([
+        Calorie(name: "Apple", calories: 95),
+        Calorie(name: "Banana", calories: 105),
+        Calorie(name: "Greek Yogurt", calories: 150)
     ]))
 }

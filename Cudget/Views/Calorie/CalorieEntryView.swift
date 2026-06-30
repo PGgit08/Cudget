@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FoodEntryView: View {
+struct CalorieEntryView: View {
     @Environment(\.dismiss) private var dismiss
 
     @State private var name = ""
@@ -15,11 +15,12 @@ struct FoodEntryView: View {
     
     @State private var showMissingFieldsAlert = false
 
-    let onAddFood: (Food) -> Void
+    let activity: Bool
+    let onAdd: (Calorie) -> Void
 
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
-            TextField("Food", text: $name, axis: .vertical)
+            TextField(activity ? "Activity" : "Food", text: $name, axis: .vertical)
                 .keyboardType(.default)
                 .textFieldStyle(.roundedBorder)
                 .lineLimit(1...4)
@@ -47,10 +48,10 @@ struct FoodEntryView: View {
                     return
                 }
 
-                onAddFood(Food(name: name, calories: Int(calories)!))
+                onAdd(Calorie(name: name, calories: activity ? Int(calories)! : -Int(calories)!))
                 dismiss()
             } label: {
-                CalorieButtonView(text: "Add", color: .red)
+                CalorieButtonView(text: "Add", color: activity ? .green : .red)
             }
             .buttonStyle(.plain)
             .padding(.bottom, 25)
@@ -80,6 +81,6 @@ struct FoodEntryView: View {
 
 #Preview {
     NavigationStack {
-        FoodEntryView { _ in }
+        CalorieEntryView(activity: false, onAdd: { _ in })
     }
 }

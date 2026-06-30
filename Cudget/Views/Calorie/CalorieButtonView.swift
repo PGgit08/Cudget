@@ -16,13 +16,13 @@ struct CalorieButtonView: View {
             .font(.title3.bold())
             .foregroundStyle(.white)
             .frame(maxWidth: .infinity)
-            .padding(.vertical, 14)
+            .padding(.vertical, 12)
             .contentShape(Rectangle())
             .glassEffect(.regular.tint(color).interactive(), in: .rect(cornerRadius: 14))
     }
 }
 
 #Preview {
-    CalorieButtonView(text: "Add Food", color: .red)
+    CalorieButtonView(text: "Add Calorie", color: .red)
         .padding()
 }

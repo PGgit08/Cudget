@@ -1,5 +1,5 @@
 //
-//  FoodRowView.swift
+//  CalorieRowView.swift
 //  Cudget
 //
 //  Created by Peter Gutkovich on 6/26/26.
@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct FoodRowView: View {
+struct CalorieRowView: View {
     let name: String
     let calories: Int
 
@@ -35,6 +35,6 @@ struct FoodRowView: View {
 }
 
 #Preview {
-    FoodRowView(name: "Very Long Food Name That Should Trail Off", calories: 950)
+    CalorieRowView(name: "Very Long Name That Should Trail Off", calories: 950)
         .padding()
 }
